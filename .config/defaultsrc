@@ -1,0 +1,10 @@
+
+export CFG=$HOME/.config
+export DEV=$HOME/Development
+export DL=$HOME/Downloads
+export DOC=$HOME/Documents
+
+export VIFM=$CFG/vifm
+
+export JAVA_HOME=$(which java)
+
