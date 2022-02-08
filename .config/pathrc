@@ -1,12 +1,10 @@
-
-# Add home binary directories if present
-[ -d "$HOME/bin" ] && export PATH=$HOME/bin:$PATH
-[ -d "$HOME/.local/bin" ] && export PATH=$HOME/.local/bin:$PATH
-
 # NVM configuration
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Cargo configuration
-[ -d "$HOME/.cargo/bin" ] && export PATH=$PATH:$HOME/.cargo/bin
+# More paths
+new_paths=("$HOME/bin" "$HOME/.local/bin" "$HOME/.cargo/bin" "$HOME/Applications/anaconda3/bin")
+for new_path in $new_paths;
+    do [ -d $new_path ] && export PATH=$new_path:$PATH;
+done
