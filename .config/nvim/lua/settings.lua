@@ -1,0 +1,55 @@
+cmd = vim.cmd
+g = vim.g
+opt = vim.opt
+
+g.mapleader = ' '
+
+-- System interactions
+opt.clipboard = 'unnamedplus'
+opt.mouse = 'a'
+
+-- Line numbering
+opt.number = true
+opt.relativenumber = true
+
+-- Encoding
+opt.encoding = 'utf-8'
+opt.fileencoding = 'utf-8'
+
+opt.cmdheight = 3
+
+opt.iskeyword:append('-')
+
+-- Wraping
+opt.wrap = false
+opt.linebreak = true
+
+-- Indentation
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
+opt.autoindent = true
+
+-- Search
+opt.hlsearch = false
+opt.ignorecase = true
+
+-- Speed up responses
+opt.updatetime = 300
+opt.timeoutlen = 500
+
+-- Spell check (disabled initially)
+opt.spell = false
+opt.spelllang = 'en_us'
+
+-- Cache files and the like
+opt.undodir = "~/.config/nvim/undodir"
+opt.undofile = true
+opt.swapfile = false
+opt.backup = false
+opt.writebackup = false
+
+-- Sign columns
+opt.signcolumn = 'number'
+
