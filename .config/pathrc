@@ -19,7 +19,7 @@
 # <<< conda initialize <<<
 
 # More paths
-new_paths=("$HOME/bin" "$HOME/.local/bin" "$HOME/.cargo/bin")
+new_paths=("$HOME/bin" "$HOME/.local/bin" "$HOME/.cargo/bin" "/home/linuxbrew/.linuxbrew/bin")
 for new_path in $new_paths;
     do [ -d $new_path ] && export PATH=$new_path:$PATH;
 done
