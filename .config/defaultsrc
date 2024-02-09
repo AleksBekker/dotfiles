@@ -2,4 +2,3 @@ export CFG=$HOME/.config
 export DEV=$HOME/Development
 export DL=$HOME/Downloads
 export DOC=$HOME/Documents
-

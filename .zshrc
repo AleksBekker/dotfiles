@@ -36,7 +36,7 @@ _comp_options+=(globdots)				# include hidden files
 
 export SHELL=/bin/zsh
 export EDITOR=$(which nvim)
-export MANPAGER="less"
+export MANPAGER="nvim +Man!"
 
 # vi mode
 bindkey -v

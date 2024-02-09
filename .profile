@@ -1,3 +1,4 @@
 export EDITOR=nvim
-~/.config/fehbg &
+# ~/.config/fehbg &
+swaybg -i $HOME/Pictures/wallpaper/active.jpg &
 polybar -r &
