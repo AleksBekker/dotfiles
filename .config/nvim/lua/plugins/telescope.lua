@@ -32,7 +32,6 @@ return {
         h = { fn = builtin.help_tags, desc = "Find help" },
         k = { fn = builtin.keymaps, desc = "Find keymap" },
         m = { fn = builtin.man_pages, desc = "Find man pages" },
-        r = { fn = builtin.lsp_references, desc = "Find references" },
         T = {
           fn = function()
             builtin.colorscheme({ enable_preview = true })

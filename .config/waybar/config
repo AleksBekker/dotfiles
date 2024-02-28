@@ -84,7 +84,7 @@
     "clock": {
         // "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format": "{:%H:%M}",
+        "format": "{:%I:%M %p}",
         "format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
@@ -110,8 +110,8 @@
     "battery": {
         "states": {
             // "good": 95,
-            "warning": 30,
-            "critical": 15
+            "warning": 40,
+            "critical": 20
         },
         "format": "{capacity}% {icon}",
         "format-charging": "{capacity}% 󰂄",

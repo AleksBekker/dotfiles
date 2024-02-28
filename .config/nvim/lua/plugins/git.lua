@@ -20,6 +20,7 @@ return {
 				mode = "n",
 				prefix = "<leader>g",
 
+        d = { command = "Gdiffsplit", desc = "Show file diff" },
 				l = { command = "Gitsigns toggle_current_line_blame", desc = "Toggle git blame" },
 				p = { command = "Gitsigns preview_hunk", desc = "Gitsigns preview" },
 			})

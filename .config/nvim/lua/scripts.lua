@@ -1,7 +1,8 @@
 local function get_opts(key_table)
   return {
-    desc = key_table["desc"],
     buffer = key_table["buffer"],
+    desc = key_table["desc"],
+    silent = key_table["silent"],
   }
 end
 

@@ -20,7 +20,7 @@ require("scripts").set_options({
     undodir = os.getenv("HOME") .. "/.cache/nvim_undodir",
     undofile = true,
 
-    hlsearch = true,
+    hlsearch = false,
     incsearch = true,
 
     termguicolors = true,
@@ -29,6 +29,11 @@ require("scripts").set_options({
     signcolumn = "yes",
     colorcolumn = "121",
 
+    wrap = false,
+
     updatetime = 50,
-  }
+  },
+  g = {
+    ftplugin_sql_omni_key = '<C-j>',
+  },
 })

@@ -1,4 +1,3 @@
-
 # ls aliases
 #alias ls="ls --color --group-directories-first -g"
 #alias l="ls -CF --color"
@@ -16,23 +15,6 @@ alias lal="ls -ahl"
 alias se="sudoedit"
 
 alias grep="grep --color"
-
-# Git WIP
-alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
-alias gunwip='git rev-list --max-count=1 --format="%s" HEAD | grep -q "\--wip--" && git reset HEAD~1'
-
-function gunwipall() {
-  local _commit=$(git log --grep='--wip--' --invert-grep --max-count=1 --format=format:%H)
-
-  # Check if a commit without "--wip--" was found and it's not the same as HEAD
-  if [[ "$_commit" != "$(git rev-parse HEAD)" ]]; then
-    git reset $_commit || return 1
-  fi
-}
-
-# Fuzzy find manuals
-# FIX: doesn't work
-alias fman="man -k * | sort | awk '{print $1}' | fzf | xargs man"
 
 # Pandoc Watch
 function pandoc-watch {

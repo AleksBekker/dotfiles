@@ -29,6 +29,8 @@ autocmd("LspAttach", {
 
 			K = { fn = vim.lsp.buf.hover, desc = "Show help for identifier", buffer = e.buf },
 			["gd"] = { fn = vim.lsp.buf.definition, "Go to definition", buffer = e.buf },
+			["gD"] = { fn = vim.lsp.buf.declaration, "Go to declaration", buffer = e.buf },
+			["gT"] = { fn = vim.lsp.buf.type_definition, "Go to type definition", buffer = e.buf },
 			["[d"] = { fn = vim.diagnostic.goto_prev, desc = "Go to previous diagnostic", buffer = e.buf },
 			["]d"] = { fn = vim.diagnostic.goto_next, desc = "Go to next diagnostic", buffer = e.buf },
 		})
@@ -44,6 +46,14 @@ autocmd("LspAttach", {
 			R = { fn = vim.lsp.buf.references, desc = "Go to references", buffer = e.buf },
 			w = { fn = vim.lsp.buf.workspace_symbol, desc = "Workspace symbol", buffer = e.buf },
 		})
+
+    local tele_builtin = require("telescope.builtin")
+		set_mappings({
+			mode = "n",
+			prefix = "<leader>f",
+
+      r = { fn = tele_builtin.lsp_references, desc = "Find references" },
+      i = { fn = tele_builtin.lsp_implementations, desc = "Find implementations" },
+		})
 	end,
 })
-

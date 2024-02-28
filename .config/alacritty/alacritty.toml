@@ -14,5 +14,5 @@ size = 12
 [keyboard]
 bindings = [
   # { <key>, <mods>, <mode>, <action> | <chars> },
-  { key="n", mods="Control | Shift", action="CreateNewWindow" }
+  { key="n", mods="Control | Shift", action="CreateNewWindow" },
 ]

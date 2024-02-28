@@ -4,8 +4,6 @@ PS1="%B%{$fg[blue]%}%~%{$fg[white]%}  ﰲ %b"
 
 source $HOME/.local/share/zsh/powerlevel10k/powerlevel10k.zsh-theme
 
-# if [[ -r "${HOME}/.local/share/zsh/powerlevel10k/" ]]
-
 setopt autocd
 
 # emacs keybinds
@@ -17,26 +15,18 @@ SAVEHIST=10000
 HISTFILE=~/.cache/zsh_history
 
 # source files
-aliasrc=$HOME/.config/aliasrc
-defaultsrc=$HOME/.config/defaultsrc
-pathrc=$HOME/.config/pathrc
-keyrc=$HOME/.config/keyrc
+sources=("$HOME/.config/aliasrc" "$HOME/.config/defaultsrc" "$HOME/.config/pathrc" "$HOME/.config/keyrc"
+"$HOME/.config/projects.zsh")
 
-[ -f $aliasrc ] && source $aliasrc
-[ -f $defaultsrc ] && source $defaultsrc
-[ -f $pathrc ] && source $pathrc
-[ -f $keyrc ] && source $keyrc
+for source in $sources;
+do [ -f $source ] && source $source;
+done
 
 # autocomplete
 autoload -U compinit
 zstyle ':completion:*' menu select
 compinit
 _comp_options+=(globdots)				# include hidden files 
-
-
-export SHELL=/bin/zsh
-export EDITOR=$(which nvim)
-export MANPAGER="nvim +Man!"
 
 # vi mode
 bindkey -v
