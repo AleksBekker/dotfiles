@@ -18,7 +18,13 @@ return {
         }),
         null_ls.builtins.formatting.isort,
         null_ls.builtins.formatting.black,
-      },
+
+        -- Go
+        null_ls.builtins.formatting.gofmt,
+
+        -- Rust
+        null_ls.builtins.formatting.rustfmt,
+      }
     })
   end,
 }

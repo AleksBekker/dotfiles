@@ -38,7 +38,7 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = {
         "lua_ls",
-        "rust_analyzer",
+        -- "rust_analyzer",
         "pyright",
         "tsserver",
       },
@@ -57,6 +57,42 @@ return {
               Lua = {
                 diagnostics = {
                   globals = { "vim", "it", "describe", "before_each", "after_each" },
+                },
+              },
+            },
+          })
+        end,
+
+        ["rust_analyzer"] = function()
+          local lspconfig = require("lspconfig")
+          lspconfig.rust_analyzer.setup({
+            capabilities = capabilities,
+            settings = {
+              ["rust_analyzer"] = {
+                cargo = {
+                  allFeatures = true,
+                  loadOutDirsFromCheck = true,
+                  runBuildScripts = true,
+                },
+                checkOnSave = {
+                  allFeatures = true,
+                  command = "clippy",
+                  extraArgs = {
+                    "--",
+                    "--no-deps",
+                    "-Dclippy::correctness",
+                    "-Dclippy::complexity",
+                    "-Wclippy::perf",
+                    "-Wclippy::pedantic",
+                  },
+                },
+                procMacro = {
+                  enable = true,
+                  ignored = {
+                    ["async-trait"] = { "async_trait" },
+                    ["napi-derive"] = { "napi" },
+                    ["async-recursion"] = { "async_recursion" },
+                  },
                 },
               },
             },
