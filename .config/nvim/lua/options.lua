@@ -1,8 +1,8 @@
 vim.g.mapleader = " "
 
-local scripts = require("scripts")
+local utils = require("utils")
 
-scripts.set_options({
+utils.set_options({
   o = {
     timeout = true,
     timeoutlen = 500,
@@ -40,7 +40,7 @@ scripts.set_options({
   },
 })
 
-scripts.set_filetype_options({
+utils.set_filetype_options({
   ["rust"] = {
     o = {
       colorcolumn = "101",

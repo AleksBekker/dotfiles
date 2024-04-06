@@ -4,7 +4,7 @@ return {
 		local mark = require("harpoon.mark")
 		local ui = require("harpoon.ui")
 
-		require("scripts").set_mappings({
+		require("utils").set_mappings({
 			mode = "n",
 
 			["<leader>a"] = { fn = mark.add_file, desc = "Add file to Harpoon" },

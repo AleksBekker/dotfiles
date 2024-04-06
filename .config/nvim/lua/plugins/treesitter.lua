@@ -10,7 +10,7 @@ return {
       indent = { enable = true },
     })
 
-    require("scripts").set_mappings({
+    require("utils").set_mappings({
       mode = "n",
       ["<leader>ic"] = { command = "TSContextToggle", desc = "Toggle context" },
     })

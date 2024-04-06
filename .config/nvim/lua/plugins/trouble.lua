@@ -6,7 +6,7 @@ return {
       icons = false,
     })
 
-    require("scripts").set_mappings({
+    require("utils").set_mappings({
       mode = "n",
 
       ["<leader>lD"] = { fn = trouble.toggle, desc = "Toggle trouble" },

@@ -13,7 +13,7 @@ return {
 
 			local builtin = require("telescope.builtin")
 
-			require("scripts").set_mappings({
+			require("utils").set_mappings({
         mode = "n",
 				prefix = "<leader>f",
 

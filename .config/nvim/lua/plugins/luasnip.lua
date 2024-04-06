@@ -4,7 +4,7 @@ return {
 	config = function()
 		local ls = require("luasnip")
 
-		require("scripts").set_mappings({
+		require("utils").set_mappings({
 			mode = "i",
 
 			["<C-k>"] = {

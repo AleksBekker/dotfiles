@@ -22,7 +22,7 @@ local autocmd = vim.api.nvim_create_autocmd
 autocmd("LspAttach", {
 
 	callback = function(e)
-		local set_mappings = require("scripts").set_mappings
+		local set_mappings = require("utils").set_mappings
 
 		set_mappings({
 			mode = "n",
@@ -47,8 +47,8 @@ autocmd("LspAttach", {
 
 			r = {
 				fn = function()
-          local new_name = vim.ui.input()
-					vim.lsp.buf.rename(new_name)
+          -- local new_name = vim.ui.input()
+					vim.lsp.buf.rename()
 				end,
 				desc = "Rename identifier",
 				buffer = e.buf,

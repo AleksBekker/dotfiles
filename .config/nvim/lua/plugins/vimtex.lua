@@ -8,7 +8,7 @@ return {
 		vim.o.conceallevel = 1
 		vim.g.tex_conceal = "abdmg"
 
-		require("scripts").set_mappings({
+		require("utils").set_mappings({
 			mode = "n",
 			prefix = "<leader>l",
 

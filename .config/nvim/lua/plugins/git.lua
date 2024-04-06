@@ -2,7 +2,7 @@ return {
 	{
 		"tpope/vim-fugitive",
 		config = function()
-			require("scripts").set_mappings({
+			require("utils").set_mappings({
 				mode = "n",
 				prefix = "<leader>g",
 
@@ -16,7 +16,7 @@ return {
 		config = function()
 			require("gitsigns").setup()
 
-			require("scripts").set_mappings({
+			require("utils").set_mappings({
 				mode = "n",
 				prefix = "<leader>g",
 
