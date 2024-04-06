@@ -28,37 +28,52 @@ local function set_mode_mappings(mode, prefix, mode_mappings)
   end
 end
 
-return {
-  -- set mappings from a table
-  set_mappings = function(mappings)
-    local prefix = mappings["prefix"] or ""
-    mappings["prefix"] = nil
+-- Table returned from this module
+local M = {}
 
-    local overall_mode = mappings["mode"]
-    mappings["mode"] = nil
-    if overall_mode ~= nil then
-      set_mode_mappings(overall_mode, prefix, mappings)
-      return
+-- Set mappings from a table
+M.set_mappings = function(mappings)
+  local prefix = mappings["prefix"] or ""
+  mappings["prefix"] = nil
+
+  local overall_mode = mappings["mode"]
+  mappings["mode"] = nil
+  if overall_mode ~= nil then
+    set_mode_mappings(overall_mode, prefix, mappings)
+    return
+  end
+
+  for mode, mode_mappings in pairs(mappings) do
+    set_mode_mappings(mode, prefix, mode_mappings)
+  end
+end
+
+-- Set options from a table
+M.set_options = function(option_table)
+  local option_spaces = {
+    g = vim.g,
+    o = vim.o,
+  }
+
+  for label, options in pairs(option_table) do
+    local option_space = option_spaces[label]
+
+    for option, value in pairs(options) do
+      option_space[option] = value
     end
+  end
+end
 
-    for mode, mode_mappings in pairs(mappings) do
-      set_mode_mappings(mode, prefix, mode_mappings)
-    end
-  end,
+-- Set options from a table per filetype
+M.set_filetype_options = function(ft_table)
+  for filetype, option_table in pairs(ft_table) do
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = filetype,
+      callback = function()
+        M.set_options(option_table)
+      end,
+    })
+  end
+end
 
-  -- set options from a table
-  set_options = function(option_table)
-    local option_spaces = {
-      g = vim.g,
-      o = vim.o,
-    }
-
-    for label, options in pairs(option_table) do
-      local option_space = option_spaces[label]
-
-      for option, value in pairs(options) do
-        option_space[option] = value
-      end
-    end
-  end,
-}
+return M

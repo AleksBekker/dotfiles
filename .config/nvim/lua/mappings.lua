@@ -1,8 +1,10 @@
-require("scripts").set_mappings({
+local scripts = require("scripts")
+
+scripts.set_mappings({
 	mode = "i",
 
 	["jk"] = { keys = "<Esc>" },
-	["<C-s>"] = { keys = "<Esc>:w<CR>", desc = "Save" },
+	-- ["<C-s>"] = { keys = "<Esc>:w<CR>", desc = "Save" },
 })
 
 require("scripts").set_mappings({
@@ -39,7 +41,7 @@ require("scripts").set_mappings({
 
 	H = { command = "bprev", desc = "Go to previous buffer" },
 	L = { command = "bnext", desc = "Go to next buffer" },
-	["<C-S>"] = { command = "w", desc = "Save current buffer" },
+	-- ["<C-S>"] = { command = "w", desc = "Save current buffer" },
 
 	-- LEARN HOW TO NOT USE THESE
 	-- ["<C-h>"] = { keys = "<C-w>h" },

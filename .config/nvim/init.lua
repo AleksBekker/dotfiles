@@ -42,18 +42,26 @@ autocmd("LspAttach", {
 			a = { fn = vim.lsp.buf.code_action, desc = "Show code actions", buffer = e.buf },
 			d = { fn = vim.diagnostic.open_float, desc = "Show line diagnostics", buffer = e.buf },
 			f = { fn = vim.lsp.buf.format, desc = "Format current buffer", buffer = e.buf },
-			r = { fn = vim.lsp.buf.rename, desc = "Rename identifier", buffer = e.buf },
 			R = { fn = vim.lsp.buf.references, desc = "Go to references", buffer = e.buf },
 			w = { fn = vim.lsp.buf.workspace_symbol, desc = "Workspace symbol", buffer = e.buf },
+
+			r = {
+				fn = function()
+          local new_name = vim.ui.input()
+					vim.lsp.buf.rename(new_name)
+				end,
+				desc = "Rename identifier",
+				buffer = e.buf,
+			},
 		})
 
-    local tele_builtin = require("telescope.builtin")
+		local tele_builtin = require("telescope.builtin")
 		set_mappings({
 			mode = "n",
 			prefix = "<leader>f",
 
-      r = { fn = tele_builtin.lsp_references, desc = "Find references" },
-      i = { fn = tele_builtin.lsp_implementations, desc = "Find implementations" },
+			r = { fn = tele_builtin.lsp_references, desc = "Find references" },
+			i = { fn = tele_builtin.lsp_implementations, desc = "Find implementations" },
 		})
 	end,
 })

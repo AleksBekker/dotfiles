@@ -1,19 +1,21 @@
-vim.g.mapleader = ' '
+vim.g.mapleader = " "
 
-require("scripts").set_options({
+local scripts = require("scripts")
+
+scripts.set_options({
   o = {
     timeout = true,
     timeoutlen = 500,
 
     smartindent = true,
     expandtab = true,
-    tabstop = 2,
-    softtabstop = 2,
-    shiftwidth = 2,
+    tabstop = 4,
+    softtabstop = 4,
+    shiftwidth = 4,
 
     relativenumber = true,
     number = true,
-    mouse = 'a',
+    mouse = "a",
 
     swapfile = false,
     backup = false,
@@ -27,13 +29,33 @@ require("scripts").set_options({
 
     scrolloff = 8,
     signcolumn = "yes",
-    colorcolumn = "121",
 
     wrap = false,
 
     updatetime = 50,
   },
   g = {
-    ftplugin_sql_omni_key = '<C-j>',
+    ftplugin_sql_omni_key = "<C-j>",
+    c_syntax_for_h = 1,
+  },
+})
+
+scripts.set_filetype_options({
+  ["rust"] = {
+    o = {
+      colorcolumn = "101",
+    },
+  },
+  ["python"] = {
+    o = {
+      colorcolumn = "121",
+    },
+  },
+  ["lua"] = {
+    o = {
+      tabstop = 2,
+      softtabstop = 2,
+      shiftwidth = 2,
+    },
   },
 })
