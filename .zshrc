@@ -16,7 +16,7 @@ HISTFILE=~/.cache/zsh_history
 
 # source files
 sources=("$HOME/.config/aliasrc" "$HOME/.config/defaultsrc" "$HOME/.config/pathrc" "$HOME/.config/keyrc"
-"$HOME/.config/projects.zsh")
+"$HOME/.config/projectsrc")
 
 for source in $sources;
 do [ -f $source ] && source $source;
@@ -72,3 +72,6 @@ source ~/.local/share/zsh/fsh/fast-syntax-highlighting.plugin.zsh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Set QT theme selector to qt5ct
+export QT_QPA_PLATFORMTHEME=qt5ct

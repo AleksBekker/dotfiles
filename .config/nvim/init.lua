@@ -15,7 +15,9 @@ vim.opt.rtp:prepend(lazypath)
 
 -- get all required files
 require("options")
-require("lazy").setup("plugins", {})
+require("lazy").setup("plugins", {
+  change_detection = { enabled = false }
+})
 require("mappings")
 
 local autocmd = vim.api.nvim_create_autocmd

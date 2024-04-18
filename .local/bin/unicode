@@ -1,0 +1,31 @@
+#!/bin/sh
+
+help() {
+  echo "Usage: unicode [-h] [-u]"
+  echo "  -h  Display this help message"
+  echo "  -u  Update unicode list, then exits"
+}
+
+update() {
+  curl -s https://unicode.org/Public/emoji/latest/emoji-test.txt \
+    | sed -e '/^#.*$/d; /^[[:space:]]*$/d; s/^.*# \(\S*\) \S* \(.*\).*$/\1 \2/' \
+    > ~/.local/share/unicode.txt
+}
+
+while getopts "duh" opt; do
+  case $opt in
+    u) update && exit $? ;;
+    h) help; exit 0 ;;
+    \?) [ ! $OPTARG = "-" ] && echo "Invalid option: -$OPTARG" >&2; help; exit 1 ;;
+  esac
+done
+
+[ ! -f ~/.local/share/unicode.txt ] && update
+
+selection=`rofi -dmenu -i -p "Unicode" -input ~/.local/share/unicode.txt`
+unicode=`echo ${selection%% *}`
+
+[ "$XDG_SESSION_TYPE" = "wayland" ] && wl-copy "$unicode" && exit 0
+
+echo "ERROR: Could not find compatible clipboard manager."
+exit 1

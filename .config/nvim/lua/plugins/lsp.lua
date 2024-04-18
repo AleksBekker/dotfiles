@@ -17,6 +17,7 @@ return {
     "hrsh7th/cmp-nvim-lsp",
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
+    "github/copilot.vim",
 
     -- Other
     "j-hui/fidget.nvim",
@@ -33,7 +34,14 @@ return {
       cmp_lsp.default_capabilities()
     )
 
-    require("fidget").setup({})
+    require("fidget").setup({
+      notification = {
+        window = {
+          winblend = 0,
+        },
+      },
+    })
+
     require("mason").setup({})
     require("mason-lspconfig").setup({
       ensure_installed = {
@@ -119,6 +127,7 @@ return {
         { name = "nvim_lua" },
         { name = "nvim_lsp" },
         { name = "luasnip" },
+        { name = "copilot" },
       }, {
         { name = "path" },
         { name = "buffer", keyword_length = 5, max_item_count = 5 },

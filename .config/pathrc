@@ -1,3 +1,5 @@
+#! /usr/bin/env zsh
+
 # More paths
 new_paths=("$HOME/bin" "$HOME/.local/bin" "$HOME/.cargo/bin" "$HOME/go/bin" "/home/linuxbrew/.linuxbrew/bin")
 for new_path in $new_paths;

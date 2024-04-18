@@ -1,8 +1,8 @@
-@import "frappe.css";
+@import "mocha.css";
 
 * {
     font-family: "JetBrainsMono NF", monospace;
-    font-size: 13px;
+    font-size: 14px;
 }
 
 window#waybar {
@@ -88,7 +88,7 @@ button:hover {
 #idle_inhibitor,
 #scratchpad,
 #mpd {
-    padding: 0 10px;
+    padding: 0.5em 1em;
 }
 
 #window,

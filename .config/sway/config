@@ -94,8 +94,15 @@ input type:touchpad {
     # Runners
     bindsym $mod+Return exec $term
     bindsym $mod+Shift+Return exec $menu
-    bindsym $mod+b exec firefox
+    bindsym $mod+d exec $menu
     bindsym $mod+Escape exec swaylock
+    bindsym $mod+b exec brave-browser-stable --ozone-platform-hint=auto
+    bindsym $mod+Shift+b exec firefox
+    bindsym $mod+m exec alacritty -e btm
+    bindsym $mod+n exec alacritty -e nvim
+
+    # TODO: try to run this without specifying the path
+    bindsym $mod+u exec ~/.local/bin/unicode
 
     # Kill focused window
     bindsym $mod+Shift+q kill
@@ -178,7 +185,6 @@ input type:touchpad {
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 
-    assign [app_id="firefox"] $ws2
     assign [app_id="Element"] $ws3
     assign [app_id="signal"] $ws3
     assign [app_id="Spotify"] $ws4
@@ -264,8 +270,8 @@ client.background           $base
 
 # DISPLAYS
 
-bindswitch lid:on output eDP-1 disable
-bindswitch lid:off output eDP-1 enable
+# bindswitch lid:on output eDP-1 disable
+# bindswitch lid:off output eDP-1 enable
 
 # Include configs from 3 locations:
 #  - /usr/share/sway/config.d

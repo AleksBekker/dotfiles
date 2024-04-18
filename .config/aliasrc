@@ -1,35 +1,28 @@
-# ls aliases
-#alias ls="ls --color --group-directories-first -g"
-#alias l="ls -CF --color"
-#alias la="ls -ACF --color"
-#alias ll="ls -hlF --color"
-#alias lal="ls -hlAF --color"
+#!/usr/bin/env zsh
 
-# exa => ls aliases
-alias ls="exa --group-directories-first"
-alias l="ls -1"
-alias la="ls -a"
-alias ll="ls -hl"
-alias lal="ls -ahl"
+# ls/exa aliases
+if command -v exa &> /dev/null; then
+  alias ls="exa --group-directories-first"
+  alias l="ls -1"
+  alias la="ls -a"
+  alias ll="ls -hl"
+  alias lal="ls -ahl"
+else
+  alias ls="ls --color --group-directories-first -g"
+  alias l="ls -CF --color"
+  alias la="ls -ACF --color"
+  alias ll="ls -hlF --color"
+  alias lal="ls -hlAF --color"
+fi
 
 alias se="sudoedit"
 
 alias grep="grep --color"
 
-# Pandoc Watch
-function pandoc-watch {
-  while true ;do
-    inotifywait -e modify $1 #2>/dev/null
-    date
-    pandoc $1 -o $1.pdf
-  done
-}
+z() {
+  zathura "$@" > /dev/null 2>&1 &
+}; compctl -/ -g '*.pdf' z
 
-# pdflatex Watch
-function pdflatex-watch {
-  while true ;do
-    inotifywait -e modify $1 #2>/dev/null
-    date
-    pdflatex $1
-  done
+ze() {
+  exec zathura "$@"
 }

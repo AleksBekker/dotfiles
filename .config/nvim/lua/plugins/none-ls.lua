@@ -9,7 +9,8 @@ return {
         null_ls.builtins.formatting.stylua,
 
         -- Python
-        null_ls.builtins.diagnostics.flake8,
+        -- FIX: this isn't working
+        -- null_ls.builtins.diagnostics.flake8,
         null_ls.builtins.diagnostics.mypy.with({
           extra_args = function()
             local virtual = os.getenv("VIRTUAL_ENV") or os.getenv("CONDA_PREFIX") or "/usr"
@@ -23,7 +24,8 @@ return {
         null_ls.builtins.formatting.gofmt,
 
         -- Rust
-        null_ls.builtins.formatting.rustfmt,
+        -- FIX: this isn't working
+        -- null_ls.builtins.formatting.rustfmt,
       }
     })
   end,

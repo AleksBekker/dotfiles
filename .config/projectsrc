@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+dir_env () {
+    pushd $1 > /dev/null
+    $SHELL
+    popd > /dev/null
+}
+
+alias api="dir_env $DEV/autospatialqc-api"
+alias rezasm="dir_env $DEV/rezasm"
+alias dotfiles="dir_env $DEV/dotfiles"
+alias shell-rs="dir_env $DEV/shell-rs"
+
+# alias api="pushd $DEV/autospatialqc-api > /dev/null"
+# alias rezasm="pushd $DEV/rezasm > /dev/null"
+# alias dotfiles="pushd $DEV/dotfiles > /dev/null"
+# alias shell-rs="pushd $DEV/shell-rs > /dev/null"

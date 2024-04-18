@@ -1,0 +1,15 @@
+#!/bin/sh
+
+mountable=`lsblk -lp | grep "part $" | awk '{print $1, "(" $4 ")"}'`
+[ -z "$mountable" ] && exit 1
+choice=`echo "$mountable" | rofi -dmenu -p "Partition"`
+[ -z "$choice" ] && exit 1
+to_mount=`echo ${choice%% *}`
+
+dirs=`find /mnt /media /mount /home -maxdepth 3 -type d 2>/dev/null`
+[ -z "$dirs" ] && exit 1
+
+mountpoint=`echo "$dirs" | rofi -dmenu -format f -p "Mount point"`
+[ -z "$mountpoint" ] && exit 1
+
+echo $mountpoint

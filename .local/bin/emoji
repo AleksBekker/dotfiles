@@ -1,36 +1,31 @@
 #!/bin/sh
 
-update=0
-
 help() {
   echo "Usage: emoji [-h] [-u]"
   echo "  -h  Display this help message"
-  echo "  -u  Update emoji list"
+  echo "  -u  Update emoji list, then exit"
   exit 0
 }
 
-while getopts "duh" opt; do
+update() {
+  curl -s https://raw.githubusercontent.com/LukeSmithxyz/voidrice/master/.local/share/larbs/emoji \
+    > ~/.local/share/emoji.txt
+}
+
+while getopts "uh" opt; do
   case $opt in
-    u) update=1 ;;
+    u) update && exit $? ;;
     h) help ;;
     \?) [ ! $OPTARG = "-" ] && echo "Invalid option: -$OPTARG" >&2; help ;;
   esac
 done
 
-if [ ! -f ~/.local/share/emoji.txt ] ; then
-  update=1
-fi
+[ ! -f ~/.local/share/emoji.txt ] && update
 
-[ $update -ne 0 ] && \
-  curl -s https://raw.githubusercontent.com/LukeSmithxyz/voidrice/master/.local/share/larbs/emoji \
-    > ~/.local/share/emoji.txt
+selection=`cat ~/.local/share/emoji.txt | rofi -dmenu -i -p "Emoji"`
+emoji=`echo ${selection%% *}`
 
-selection=`cat ~/.local/share/emoji.txt | rofi -dmenu -i -p "Emoji" | awk '{print $1}'`
-
-if [ "$XDG_SESSION_TYPE" = "wayland" ] ; then
-  wl-copy "$selection"
-  exit 0
-fi
+[ "$XDG_SESSION_TYPE" = "wayland" ] && wl-copy "$emoji" && exit 0
 
 echo "ERROR: Could not find compatible clipboard manager."
 exit 1
