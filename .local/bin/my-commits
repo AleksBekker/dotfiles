@@ -47,6 +47,7 @@ if [ ! -d ".git" ]; then
   error "Not a git repository. Please run this script in a git repository, or specify the directory with -d."
 fi
 
+# Transforms the original remote URL to `https://github.com/<org name>/<repo name>/commit/`
 url=$(
   git remote get-url origin | sed '
     s|^git@|https://|;
@@ -57,6 +58,7 @@ url=$(
   '
 )
 
+# %H is the full hash
 links=$(git log --pretty=format:"$url%H" --author="$email" --since="$since" --all)
 
 cd $backdir  # Return to the original directory ASAP in case of failures
