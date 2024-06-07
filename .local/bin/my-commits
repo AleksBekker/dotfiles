@@ -57,9 +57,7 @@ url=$(
   '
 )
 
-links=$(git log --author="$email" --since="$since" --all \
-  | sed -n '/^commit /{s|^commit |'"$url"'|;p}'
-)
+links=$(git log --pretty=format:"$url%H" --author="$email" --since="$since" --all)
 
 cd $backdir  # Return to the original directory ASAP in case of failures
 
