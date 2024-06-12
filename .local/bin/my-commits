@@ -8,8 +8,6 @@ help() {
   echo "  -d <dir>   Directory of the git repository. Defaults to the current directory."
   echo "  -s <since> Date since. Defaults to the beginning of time itself (1970-01-01)."
 }
-
-backdir=$(pwd)
 dir=$(pwd)
 since="1970-01-01"
 
@@ -34,21 +32,19 @@ error() {
 
 if [ -z "$email" ]; then
   warn "Email not provided. Attempting to use 'user.email'"
-  email=$(git config user.email)
+  email=$(git -C "$dir" config user.email)
 fi
 
 if [ -z "$email" ]; then
   error "Email not found in git configuration either. Please provide it with -e."
 fi
 
-cd $dir
-
-if [ ! -d ".git" ]; then
+if [ ! -d "$dir/.git" ]; then
   error "Not a git repository. Please run this script in a git repository, or specify the directory with -d."
 fi
 
 url=$(
-  git remote get-url origin | sed '
+  git -C "$dir" remote get-url origin | sed '
     s|^git@|https://|;
     s|^https://github.com:|https://github.com/|;
     s|\.git$||;
@@ -57,7 +53,7 @@ url=$(
   '
 )
 
-links=$(git log --author="$email" --since="$since" --all \
+links=$(git -C "$dir" log --author="$email" --since="$since" --all \
   | sed -n '/^commit /{s|^commit |'"$url"'|;p}'
 )
 
