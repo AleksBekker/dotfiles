@@ -2,166 +2,118 @@
 
 * {
     font-family: "JetBrainsMono NF", monospace;
-    font-size: 14px;
+    font-size: 15px;
+    min-height: 0;
 }
 
-window#waybar {
-    background-color: rgba(0, 0, 0, 0);
+#waybar {
+    background: transparent;
     color: @text;
-    transition-property: background-color;
-    transition-duration: .5s;
+        margin: 5px 5px;
 }
 
-window#waybar.hidden {
-    opacity: 0.2;
-}
-
-/*
-window#waybar.empty {
-    background-color: transparent;
-}
-window#waybar.solo {
-    background-color: #FFFFFF;
-}
-*/
-
-window#waybar.termite {
-    background-color: #3F3F3F;
-}
-
-window#waybar.chromium {
-    background-color: #000000;
-    border: none;
-}
-
-button {
-    /* Use box-shadow instead of border so the text isn't offset */
-    box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
-    border: none;
-    border-radius: 0;
-}
-
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
-button:hover {
-    background: inherit;
-    box-shadow: inset 0 -3px @text;
+#workspaces {
+    border-radius: 1rem;
+    margin: 5px;
+    background-color: @surface0;
+    margin-left: 1rem;
 }
 
 #workspaces button {
-    padding: 0 5px;
-    background-color: transparent;
-    color: @text;
+    color: @lavender;
+    border-radius: 1rem;
+    padding: 0.4rem;
+}
+
+#workspaces button.active {
+    color: @sky;
+        border-radius: 1rem;
 }
 
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
+    color: @sapphire;
+    border-radius: 1rem;
 }
 
-#workspaces button.focused {
-    background-color: @base;
-    box-shadow: inset 0 -3px @text;
+.modules-center > * > *, .modules-right > * > * {
+    background-color: @surface0;
+    padding: 0.5rem 1rem;
+    margin: 5px 0;
 }
 
-#workspaces button.urgent {
-    background-color: @red;
+#clock {
+    color: @blue;
+    border-radius: 0px 1rem 1rem 0px;
+    margin-right: 1rem;
 }
 
-#mode {
-    background-color: @base;
-    border-bottom: 3px solid @text;
+#battery {
+    color: @green;
 }
 
-#clock,
-#battery,
-#cpu,
-#memory,
-#disk,
-#temperature,
-#backlight,
-#network,
-#pulseaudio,
-#wireplumber,
-#custom-media,
-#tray,
-#mode,
-#idle_inhibitor,
-#scratchpad,
-#mpd {
-    padding: 0.5em 1em;
-}
-
-#window,
-#workspaces {
-    margin: 0 4px;
-}
-
-/* If workspaces is the leftmost module, omit left margin */
-.modules-left > widget:first-child > #workspaces {
-    margin-left: 0;
-}
-
-/* If workspaces is the rightmost module, omit right margin */
-.modules-right > widget:last-child > #workspaces {
-    margin-right: 0;
-}
-
-.modules-left {
-    padding: 0 1em;
-}
-
-.modules-right, .modules-left {
-    border-radius: 2em;
-    background-color: @mantle;
-    opacity: 0.8;
-    color: @text;
-    margin-left: 5em;
-    margin-right: 5em;
+#battery.charging {
+    color: @green;
 }
 
 @keyframes blink {
     to {
-        background-color: #ffffff;
-        color: #000000;
+        background-color: @surface0;
+        color: @green;
     }
 }
 
-#battery.critical:not(.charging) {
-    background-color: @red;
-    color: #ffffff;
+#battery.warning:not(.charging), #battery.critical:not(.charging) {
+    color: @mantle;
     animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
     animation-direction: alternate;
 }
 
-#custom-media {
-    min-width: 100px;
+#battery.warning:not(.charging) {
+    background-color: @yellow;
 }
 
-#tray > .passive {
-    -gtk-icon-effect: dim;
-}
-
-#tray > .needs-attention {
-    -gtk-icon-effect: highlight;
+#battery.critical:not(.charging) {
     background-color: @red;
 }
 
-#language {
-    padding: 0 5px;
-    margin: 0 5px;
-    min-width: 16px;
+#cpu {
+    color: @peach;
 }
 
-#keyboard-state {
-    padding: 0 0px;
-    margin: 0 5px;
-    min-width: 16px;
+#memory {
+    color: @yellow;
 }
 
-#keyboard-state > label {
-    padding: 0 5px;
+#backlight, #battery {
+    border-radius: 0;
 }
 
+#pulseaudio {
+    color: @maroon;
+    border-radius: 1rem 0px 0px 1rem;
+    margin-left: 1rem;
+}
+
+#custom-music {
+    color: @mauve;
+    border-radius: 1rem;
+}
+
+#custom-lock {
+    border-radius: 1rem 0px 0px 1rem;
+    color: @lavender;
+}
+
+#custom-power {
+    margin-right: 1rem;
+    border-radius: 0px 1rem 1rem 0px;
+    color: @red;
+}
+
+#tray {
+    margin-right: 1rem;
+    border-radius: 1rem;
+}
