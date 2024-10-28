@@ -2,9 +2,7 @@
 autoload -U colors && colors
 PS1="%B%{$fg[blue]%}%~%{$fg[white]%}  ﰲ %b"
 
-source $HOME/.local/share/zsh/powerlevel10k/powerlevel10k.zsh-theme
-
-setopt autocd
+# setopt autocd
 
 # emacs keybinds
 bindkey -e
@@ -63,15 +61,13 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
+eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/catppuccin-mocha.json)"
 source ~/.local/share/zsh/fsh/fast-syntax-highlighting.plugin.zsh
 
 # [ "$TERM" != "linux" ] && \
 #     [ "$TERM" != "xterm-256color" ] && \
 #     [ "$TERM_PROGRAM" != "vscode" ] && \
 #     ufetch
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Set QT theme selector to qt5ct
 export QT_QPA_PLATFORMTHEME=qt5ct
