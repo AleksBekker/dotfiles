@@ -1,8 +1,10 @@
+local utils = require("utils")
+
 return {
 	{
 		"tpope/vim-fugitive",
 		config = function()
-			require("utils").set_mappings({
+			utils.set_mappings({
 				mode = "n",
 				prefix = "<leader>g",
 
@@ -16,7 +18,7 @@ return {
 		config = function()
 			require("gitsigns").setup()
 
-			require("utils").set_mappings({
+			utils.set_mappings({
 				mode = "n",
 				prefix = "<leader>g",
 

@@ -1,5 +1,7 @@
+#!/usr/bin/env zsh
+
 export SHELL=/bin/zsh
 export EDITOR=$(which nvim)
 export MANPAGER="nvim +Man!"
 
-export DEV=$HOME/Development
+export DEV=$HOME/dev

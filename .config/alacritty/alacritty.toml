@@ -9,7 +9,7 @@ dynamic_title = true
 
 [font]
 normal = { family = "JetBrainsMono Nerd Font", style = "regular" }
-size = 16
+size = 13
 
 [keyboard]
 bindings = [

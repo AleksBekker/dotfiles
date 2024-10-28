@@ -4,11 +4,10 @@ set statusbar-v-padding 0
 set page-padding 1
 set selection-clipboard clipboard
 set recolor true
-map u scroll half-up
-map d scroll half-down
+set first-page-column 1:1
 map r reload
 map R rotate
 map i recolor
 map p print
 map g goto top
-include catppuccin-mocha
+include catppuccin-macchiato

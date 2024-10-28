@@ -1,13 +1,13 @@
-local utils = require("utils")
+local set_mappings = require("utils").set_mappings
 local commands = require("mappings.commands")
 
-utils.set_mappings({
+set_mappings({
   mode = "i",
 
   ["jk"] = { keys = "<Esc>" },
 })
 
-require("utils").set_mappings({
+set_mappings({
   mode = "n",
   prefix = "<leader>",
   c = { command = "bdelete", desc = "Close current buffer" },
@@ -36,7 +36,7 @@ require("utils").set_mappings({
   },
 })
 
-require("utils").set_mappings({
+set_mappings({
   mode = "n",
 
   H = { command = "bprev", desc = "Go to previous buffer" },

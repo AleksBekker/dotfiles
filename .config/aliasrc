@@ -1,19 +1,11 @@
 #!/usr/bin/env zsh
 
 # ls/exa aliases
-if command -v exa &> /dev/null; then
-  alias ls="exa --group-directories-first"
-  alias l="ls -1"
-  alias la="ls -a"
-  alias ll="ls -hl"
-  alias lal="ls -ahl"
-else
-  alias ls="ls --color --group-directories-first -g"
-  alias l="ls -CF --color"
-  alias la="ls -ACF --color"
-  alias ll="ls -hlF --color"
-  alias lal="ls -hlAF --color"
-fi
+alias ls="ls --color --group-directories-first"
+alias l="ls -CF --color"
+alias la="ls -ACF --color"
+alias ll="ls -hlF --color"
+alias lal="ls -hlAF --color"
 
 alias se="sudoedit"
 

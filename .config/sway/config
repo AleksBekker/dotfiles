@@ -40,6 +40,7 @@ output * bg $HOME/Pictures/wallpaper/sunset.jpg fill
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 output DP-4 pos 0 0
+output DP-5 pos 0 0
 output eDP-1 pos 3440 500
 
 workspace 1 output DP-4
@@ -98,8 +99,9 @@ input type:touchpad {
     bindsym $mod+Escape exec swaylock
     bindsym $mod+b exec brave-browser-stable --ozone-platform-hint=auto
     bindsym $mod+Shift+b exec firefox
-    bindsym $mod+m exec alacritty -e btm
-    bindsym $mod+n exec alacritty -e nvim
+    bindsym $mod+m exec $term -e btm
+    bindsym $mod+n exec $term -e nvim
+    bindsym $mod+t exec $term -e nvim ~/todo.md
 
     # TODO: try to run this without specifying the path
     bindsym $mod+u exec ~/.local/bin/unicode

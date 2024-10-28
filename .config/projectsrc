@@ -10,6 +10,13 @@ alias api="dir_env $DEV/autospatialqc-api"
 alias rezasm="dir_env $DEV/rezasm"
 alias dotfiles="dir_env $DEV/dotfiles"
 alias shell-rs="dir_env $DEV/shell-rs"
+alias rash="dir_env $DEV/rash"
+alias submitty="dir_env $DEV/Submitty"
+
+export PSOFT_ORIGIN="https://submitty.cs.rpi.edu/git/u24/csci2600/hw04"
+psoft_link () {
+  echo "https://submitty.cs.rpi.edu/git/u24/csci2600/$1/bekkea"
+}
 
 # alias api="pushd $DEV/autospatialqc-api > /dev/null"
 # alias rezasm="pushd $DEV/rezasm > /dev/null"

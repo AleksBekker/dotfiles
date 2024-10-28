@@ -34,6 +34,8 @@ utils.set_options({
 
 		updatetime = 50,
 
+    showmode = false,
+
 		-- Folds
 		foldmethod = "expr",
 		foldexpr = "v:lua.vim.treesitter.foldexpr()",
@@ -110,9 +112,25 @@ utils.set_filetype_options({
 	},
   ["go"] = {
     o = {
+      tabstop = 4,
+      softtabstop = 4,
+      shiftwidth = 4,
+    }
+  },
+  ["c"] = {
+    o = {
+      colorcolumn = "81",
       tabstop = 2,
       softtabstop = 2,
       shiftwidth = 2,
     }
-  }
+  },
+  ["haskell"] = {
+    o = {
+      colorcolumn = "71",
+      tabstop = 2,
+      softtabstop = 2,
+      shiftwidth = 2,
+    }
+  },
 })
