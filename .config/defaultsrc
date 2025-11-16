@@ -5,3 +5,4 @@ export EDITOR=$(which nvim)
 export MANPAGER="nvim +Man!"
 
 export DEV=$HOME/dev
+export SECLISTS=$HOME/.local/share/seclists

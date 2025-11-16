@@ -64,10 +64,3 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/catppuccin-mocha.json)"
 source ~/.local/share/zsh/fsh/fast-syntax-highlighting.plugin.zsh
 
-# [ "$TERM" != "linux" ] && \
-#     [ "$TERM" != "xterm-256color" ] && \
-#     [ "$TERM_PROGRAM" != "vscode" ] && \
-#     ufetch
-
-# Set QT theme selector to qt5ct
-export QT_QPA_PLATFORMTHEME=qt5ct
