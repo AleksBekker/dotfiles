@@ -8,3 +8,5 @@ new_paths=("$HOME/.cargo/bin" "${VOLTA_HOME}/bin" "${GOPATH}/bin" "$HOME/.local/
 for new_path in $new_paths;
     do [ -d $new_path ] && export PATH=$new_path:$PATH;
 done
+
+eval "$(/usr/libexec/path_helper)"

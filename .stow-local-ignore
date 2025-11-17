@@ -1,5 +1,7 @@
+^/README.md
 ^/Makefile
 \.stow-local-ignore
+\pyrightconfig.json
 
 # Default ignore:
 

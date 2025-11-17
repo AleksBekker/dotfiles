@@ -2,7 +2,18 @@
 
 export SHELL=/bin/zsh
 export EDITOR=$(which nvim)
-export MANPAGER="nvim +Man!"
 
 export DEV=$HOME/dev
-export SECLISTS=$HOME/.local/share/seclists
+export PATH="/Users/aleks/.local/state/fnm_multishells/49115_1743012108223/bin":$PATH
+
+
+
+export FNM_MULTISHELL_PATH="/Users/aleks/.local/state/fnm_multishells/49115_1743012108223"
+export FNM_VERSION_FILE_STRATEGY="local"
+export FNM_DIR="/Users/aleks/.local/share/fnm"
+export FNM_LOGLEVEL="info"
+export FNM_NODE_DIST_MIRROR="https://nodejs.org/dist"
+export FNM_COREPACK_ENABLED="false"
+export FNM_RESOLVE_ENGINES="true"
+export FNM_ARCH="arm64"
+rehash

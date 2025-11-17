@@ -1,0 +1,141 @@
+\documentclass[letterpaper,$fontsize$pt]{article}
+
+% Package imports
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titling}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{charter} % Charter font family
+\usepackage[charter]{mathdesign} % Math fonts to match Charter
+
+% Conditional column layout
+$if(twocolumn)$
+\usepackage{multicol}
+$endif$
+
+% Page geometry - customizable margins
+\geometry{
+    letterpaper,
+    top=$vmargin$in,
+    bottom=$vmargin$in,
+    left=$hmargin$in,
+    right=$hmargin$in,
+    headheight=0.8in,
+    headsep=0.3in,
+    footskip=0.4in
+}
+
+% Header configuration
+\pagestyle{fancy}
+\fancyhf{} % Clear all header and footer fields
+
+% Custom header with logo and title info
+\fancyhead[L]{
+    \begin{minipage}[c]{0.15\textwidth}
+        \includegraphics[width=\textwidth]{$logo$}
+    \end{minipage}
+}
+\fancyhead[C]{
+    \begin{minipage}[c]{0.7\textwidth}
+        \centering
+        \Large\textbf{$title$} \\
+        $if(subtitle)$
+        \large $subtitle$ \\
+        $endif$
+        $if(author)$
+        \normalsize By: $author$ \\
+        $endif$
+        \small Generated: $date$
+    \end{minipage}
+}
+\fancyhead[R]{
+    \begin{minipage}[c]{0.15\textwidth}
+        % Reserved space for additional branding if needed
+    \end{minipage}
+}
+
+% Footer
+\fancyfoot[C]{\thepage}
+
+% Remove header rule if desired
+$if(no-header-rule)$
+\renewcommand{\headrulewidth}{0pt}
+$else$
+\renewcommand{\headrulewidth}{0.4pt}
+$endif$
+
+% Hyperlink styling
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+    citecolor=black
+}
+
+% Custom section styling to match document
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{}
+
+% List styling to match document
+\setlist[itemize]{leftmargin=*,topsep=0.5em,itemsep=0.25em}
+\setlist[enumerate]{leftmargin=*,topsep=0.5em,itemsep=0.25em}
+
+% Spacing adjustments
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+
+% Define subtitle command for LaTeX article class
+\providecommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\large#1\end{center}
+    \vskip0.5em}%
+}
+
+% Define tightlist command for Pandoc compatibility
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+% Title customization (if not using header)
+$if(title-page)$
+\title{$title$}
+$if(subtitle)$
+\subtitle{$subtitle$}
+$endif$
+$if(author)$
+\author{$author$}
+$endif$
+\date{$date$}
+$endif$
+
+\begin{document}
+
+% Title page option
+$if(title-page)$
+\maketitle
+\newpage
+$endif$
+
+% Begin two-column layout if specified
+$if(twocolumn)$
+\begin{multicols}{2}
+$endif$
+
+% Document body
+$body$
+
+% End two-column layout if specified
+$if(twocolumn)$
+\end{multicols}
+$endif$
+
+\end{document}

@@ -1,0 +1,72 @@
+#!/bin/sh
+
+help() {
+    echo "Usage: rsei-pdf [-d] [-h] [-i path.md] [-o path.pdf]"
+    echo "  -i <file.md>  Input markdown file. If not provided, uses stdin"
+    echo "  -o <file.md>  Output for pdf file. If not provided, uses stdout"
+    echo "  -h            Display this help message"
+    echo "  -d            Display debug messages"
+    exit 0
+}
+
+debug() {
+    if [ $debug = 1 ]; then
+        echo $1 >&2
+    fi
+}
+
+debug=0
+
+while getopts "i:o:dh" opt; do
+  case $opt in
+    h) help ;;
+    d) debug=1 ;;
+    i) input=$(realpath $OPTARG || exit 1) ;;
+    o) output=$OPTARG ;;
+    \?) [ ! $OPTARG = "-" ] && echo "Invalid option: -$OPTARG" >&2; help ;;
+  esac
+done
+
+pandoc_store=$(pandoc --version | \
+    grep "User data directory" | \
+    sed "s/^User data directory: //")
+debug "Pandoc Local Store: ${pandoc_store}"
+
+template="${pandoc_store}/templates/rsei.latex"
+debug "Template path: ${template}"
+cmd="
+    pandoc
+        --template=${template}
+        --pdf-engine=pdflatex
+        --pdf-engine-opt=-shell-escape
+        -V papersize=letter
+        -V geometry:margin=1in
+        -V geometry:left=0.75in
+        -V geometry:right=0.75in
+        -V colorlinks=true
+"
+
+if [ "$input" = "" ]; then
+    use_stdin=1
+    debug "Reading from standard input"
+else
+    cmd="${cmd} $(realpath ${input} || exit 1)"
+fi
+
+if [ "$output" = "" ]; then
+    use_stdout=1
+    debug "Outputting to standard output"
+else
+    touch ${output} || exit 1
+    cmd="${cmd} -o ${output}"
+    rm ${output}
+fi
+
+(
+    cd ${pandoc_store} ||exit 1
+    debug "cd'd into $(pwd)"
+
+    # Load latex paths
+    eval "$(/usr/libexec/path_helper)"
+    eval ${cmd}
+)

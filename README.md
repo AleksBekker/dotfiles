@@ -15,4 +15,3 @@ git clone git@github.com:AleksBekker/dotfiles.git path/to/dotfiles --recurse-sub
 cd path/to/dotfiles
 make install
 ```
-

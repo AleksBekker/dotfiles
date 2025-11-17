@@ -1,0 +1,274 @@
+#!/usr/bin/env -S uv run --script
+#
+# /// script
+# requires-python = ">=3.13"
+# dependencies = []
+# ///
+
+
+import argparse
+import io
+import logging
+import os
+import re
+import subprocess
+from contextlib import contextmanager
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Generic, Literal, TypeVar
+
+from fastmcp import FastMCP
+import json
+
+
+@contextmanager
+def string_logging(logger_name=None, level=logging.DEBUG):
+    capture = io.StringIO()
+    handler = logging.StreamHandler(capture)
+    handler.setLevel(level)
+
+    console = logging.StreamHandler()
+    console.setLevel(level)
+
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s: %(message)s")
+    handler.setFormatter(formatter)
+    console.setFormatter(formatter)
+
+    logger = logging.getLogger(logger_name)
+    original_level = logger.level
+
+    logger.addHandler(handler)
+    logger.addHandler(console)
+    logger.setLevel(level)
+
+    try:
+        yield logger, capture
+    finally:
+        logger.removeHandler(handler)
+        logger.removeHandler(console)
+        logger.setLevel(original_level)
+
+
+@dataclass
+class FormattingOptions:
+    """Configuration options for PDF document formatting.
+
+    Defines the layout and styling parameters used when converting
+    Markdown to PDF via pandoc with LaTeX templates.
+
+    Attributes:
+        documentclass: LaTeX document class (default: "article")
+        papersize: Paper size for the document (default: "letter")
+        vmargin: Vertical margin in inches (default: 1)
+        hmargin: Horizontal margin in inches (default: 0.75)
+        fontsize: Font size in points (default: 11)
+        twocolumn: Enable two-column layout (default: False)
+    """
+
+    documentclass: Literal["article"] = "article"
+    papersize: Literal["letter"] = "letter"
+    vmargin: float = 1
+    hmargin: float = 0.75
+    fontsize: int = 11
+    twocolumn: bool = False
+
+
+T = TypeVar("T")
+
+
+class ListBuilder(Generic[T]):
+
+    def __init__(self, *items: T):
+        self._items: list[T] = [*items]
+
+    def add(self, *items: T):
+        self._items += list(items)
+        return self
+
+    def add_if(self, condition: bool, *items: T):
+        if condition:
+            self.add(*items)
+        return self
+
+    def build(self) -> list[T]:
+        return self._items
+
+
+def find_pandoc_path() -> Path:
+
+    result = subprocess.run(
+        ["pandoc", "-v"],
+        text=True,
+        capture_output=True,
+        timeout=5,
+    )
+
+    result.check_returncode()
+
+    match = re.search(
+        r"^User data directory: (\S+)",
+        result.stdout,
+        re.MULTILINE,
+    )
+
+    if not match:
+        return Path("")
+
+    return Path(match.group(1))
+
+
+def get_latex_paths():
+    """Load LaTeX paths using macOS path_helper utility.
+
+    Args:
+        logger: Logger instance for error reporting and debugging
+    """
+
+    try:
+        logging.debug("Loading LaTeX paths using /usr/libexec/path_helper")
+
+        result = subprocess.run(
+            ["/usr/libexec/path_helper"],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+
+        if result.returncode == 0:
+            logging.debug("path_helper succeeded")
+        else:
+            logging.warning(f"path_helper returned non-zero exit code: {result.returncode}")
+
+        if result.stderr:
+            logging.warning(f"path_helper stderr: {result.stderr.strip()}")
+
+        match = re.match(r'PATH="([^"]+)"', result.stdout)
+        if match is None:
+            logging.warning("path_helper PATH not found")
+        else:
+            os.environ["PATH"] = match.group(1)
+            logging.info(f"new $PATH: {os.environ['PATH']}")
+
+
+    except subprocess.TimeoutExpired:
+        logging.error("path_helper: timed out")
+    except FileNotFoundError:
+        logging.error("/usr/libexec/path_helper not found - not running on macOS?")
+    except Exception as e:
+        logging.error(f"path_helper: Unexpected error loading LaTeX paths: {e}")
+
+
+def generate_rsei_pdf(markdown: str, filename: str, format: str):
+
+    formatting=FormattingOptions(**json.loads(format))
+    logging.debug(f"formatting options: {formatting}")
+
+    pandoc_path = find_pandoc_path()
+    logging.debug(f"pandoc path: {pandoc_path.absolute()}")
+
+    template: Path = pandoc_path / "templates" / "rsei.latex"
+    logging.debug(f"template path: {template.absolute()}")
+
+    output: Path = Path.home() / "Documents" / "RSEi" / f"{filename}.pdf"
+    logging.debug(f"output path: {output.absolute()}")
+
+    cmd = ListBuilder("pandoc") \
+        .add("--pdf-engine=pdflatex", "--pdf-engine-opt=-shell-escape") \
+        .add(f"--template={template}") \
+        .add("-o", str(output)) \
+        .add("-V", f"documentclass={formatting.documentclass}") \
+        .add("-V", f"papersize={formatting.papersize}") \
+        .add("-V", f"fontsize={formatting.fontsize}pt") \
+        .add("-V", f"geometry:margin={formatting.vmargin}in") \
+        .add("-V", f"geometry:left={formatting.hmargin}in") \
+        .add("-V", f"geometry:right={formatting.hmargin}in") \
+        .add_if(formatting.twocolumn, "-V", "twocolumn") \
+        .add("-V", "colorlinks=true") \
+        .build()
+    logging.debug(f"pandoc command: {cmd}")
+
+    get_latex_paths()
+
+    try:
+        result = subprocess.run(
+            cmd,
+            cwd=pandoc_path,
+            text=True,
+            input=markdown,
+            capture_output=True,
+            timeout=30,
+        )
+    except TimeoutError as e:
+        logging.error(f"pandoc timed out. Details: {e}")
+        return
+    except Exception as e:
+        logging.error(f"pandoc execution encountered error: {e}")
+        return
+
+    if result.returncode == 0:
+        logging.info("pandoc executed successfully")
+    else:
+        logging.error(f"pandoc had non-zero return code {result.returncode}")
+
+    if result.stdout:
+        logging.info(f"pandoc STDOUT: {result.stdout}")
+    if result.stderr:
+        logging.info(f"pandoc STDERR: {result.stderr}")
+
+    if output.exists:
+        logging.info(f"output file '{output}' exists")
+    else:
+        logging.warning(f"output file '{output}' does not exist")
+
+
+mcp = FastMCP("Markdown Processor")
+
+
+@mcp.tool
+def to_rsei_pdf(markdown: str, filename: str, format: str):
+    """Converts a markdown string to a PDF using the RSEi template.
+
+    Args:
+        markdown (str): the contents of a markdown document
+        filename (str): the extension-less file name of the output file
+        format (str): JSON string containing formatting options for the PDF
+
+    Returns:
+        Logs from tool execution. Every execution should contain logs, so an
+            empty return means result logging has failed.
+
+    Effects:
+        Stores the generated pdf in the user's Documents/RSEi folder
+    """
+
+    with string_logging(logging.getLogger().name) as (_, capture):
+        generate_rsei_pdf(markdown, filename, format)
+        return capture.getvalue()
+
+
+def arg_parser():
+    parser = argparse.ArgumentParser(description="Make an RSEi markdown file")
+    parser.add_argument("--mcp", action="store_true", help="Run MCP server")
+    parser.add_argument("-i", "--input", help="Input file. Defaults to using stdin")
+    parser.add_argument("-o", "--output", help="Output file. Defaults to using stdout")
+    parser.add_argument("--format", default="{}", help="JSON string of formatting options")
+    return parser
+
+
+def main():
+    parser = arg_parser()
+    args = parser.parse_args()
+
+    if args.mcp:
+        mcp.run()
+        return
+
+    if args.input:
+        ...
+
+    if args.output:
+        ...
+
+
+if __name__ == "__main__":
+    main()
