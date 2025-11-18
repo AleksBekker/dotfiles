@@ -1,3 +1,20 @@
+-- init.lua
+--
+-- My single-file Neovim configuration
+--
+-- TODO:
+--   * Fix Plenary on MacOS
+--   * Figure out Mason + lspconfig integration
+--   * Consider DAP use instead of tmux + entr workflow
+--   - Configure built-in terminal and mappings
+--   - Move from Lazy plugin manager to builtin upon 0.12 update
+--     - Remove the .gitignore when no longer using lazy.nvim
+--   - Consider moving from blink.nvim to builtin nvim completions
+--   - Fix Trouble config and set up mappings
+--   - Disable lua autoindenting within table tables (seen in weird spacing in package
+--     installation)
+
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -31,8 +48,9 @@ vim.o.wrap = false
 vim.o.winborder = "rounded"
 vim.o.colorcolumn = "91"
 vim.o.signcolumn = "yes"
-vim.o.pumblend = 10
-vim.o.winblend = 10
+vim.o.termguicolors = true
+vim.o.pumblend = 5
+vim.o.winblend = 5
 
 -- Indentation
 vim.o.autoindent = true
@@ -49,6 +67,7 @@ vim.o.timeoutlen = 500
 -- Search settings
 vim.o.ignorecase = true
 vim.o.smartcase = true
+vim.o.hlsearch = false
 vim.o.incsearch = true
 
 -- File handling
@@ -74,7 +93,7 @@ vim.o.splitright = true
 
 
 
--------------------- Mappings --------------------
+-------------------- Standard Mappings --------------------
 
 vim.g.mapleader = " "
 local map = vim.keymap.set
@@ -85,7 +104,7 @@ map("i", "jk", "<Esc>")
 -- Buffer actions
 map("n", "<leader>c", "<cmd>bdelete<CR>")
 map("n", "<leader>C", "<cmd>bdelete!<CR>")
-map("n", "<leader>n", "<cmd>tabe<CR>")
+map("n", "<leader>n", "<cmd>tabnew<CR>")
 map("n", "<leader>o", "<cmd>update<CR>:so<CR>")
 map("n", "<leader>q", "<cmd>q<CR>")
 map("n", "<leader>Q", "<cmd>q!<CR>")
@@ -99,164 +118,32 @@ map("n", "<leader>pi", ":Lazy install<CR>")
 map("n", "<leader>ps", ":Lazy<CR>")
 map("n", "<leader>pu", ":Lazy update<CR>")
 
+-- Movement
+map("n", "<C-d>", "<C-d>zz")
+map("n", "<C-u>", "<C-u>zz")
+
+-- Other
+map("n", "<leader>e", "<cmd>Ex<cr>", { desc = "Explorer: open" })
+
 
 
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = {
-        {
-            "folke/tokyonight.nvim",
-            lazy = false,
-            priority = 1000,
-            config = function()
-                require("tokyonight").setup({ transparent = true })
-                vim.cmd("colorscheme tokyonight-night")
-            end,
-        },
-        {
-            "mason-org/mason.nvim",
-            opts = {
-                ui = {
-                    icons = {
-                        package_installed = "✓",
-                        package_pending = "➜",
-                        package_uninstalled = "✗",
-                    }
-                }
-            },
-            config = function(_, opts)
-                require("mason").setup(opts)
-
-                map("n", "<leader>pm", ":Mason<CR>")
-                map("n", "<leader>pM", ":MasonUpdate<CR>")
-            end,
-        },
+        { "folke/tokyonight.nvim",                  lazy = false,       priority = 1000 },
+        { "mason-org/mason.nvim" },
         { "neovim/nvim-lspconfig" },
-        {
-            "folke/lazydev.nvim",
-            ft = "lua",
-            opts = {
-                library = {
-                    { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-                }
-            },
-        },
-        {
-            "nvim-treesitter/nvim-treesitter",
-            branch = "master",
-            lazy = false,
-            build = ":TSUpdate",
-            config = function()
-                require("nvim-treesitter.configs").setup({
-                    auto_install = true,
-                    ensure_installed = { "lua", "python" },
-                    highlight = { enable = true },
-                    indent = { enable = true },
-                    additional_vim_regex_highlighting = false,
-                })
-            end,
-        },
-        {
-            "saghen/blink.cmp",
-            version = "1.*",
-            opts = {
-                keymap = { preset = "default" },
-
-                signature = { enabled = true },
-
-                fuzzy = { implementation = "prefer_rust_with_warning" },
-            },
-            opts_extend = { "sources.default" },
-        },
-        {
-            "nvim-telescope/telescope.nvim",
-            tag = "0.1.8",
-            dependencies = {
-                "nvim-lua/plenary.nvim",
-                "nvim-telescope/telescope-ui-select.nvim",
-            },
-            opts = {
-                defaults = {
-                    prompt_prefix = " ",
-                    selection_caret = " ",
-                },
-                extensions = {
-                    ["ui-select"] = {}
-                }
-            },
-            config = function(_, opts)
-                require("telescope").setup(opts)
-                pcall(require("telescope").load_extension, "ui-select")
-
-                local tele = require("telescope.builtin")
-
-                local tele_map = function(keys, func, desc)
-                    map("n", "<leader>f" .. keys, func, { desc = "Find: " .. desc })
-                end
-
-                tele_map("/", tele.current_buffer_fuzzy_find, "within buffer")
-                tele_map("b", tele.buffers, "buffers")
-                tele_map("c", tele.grep_string, "word under cursor")
-                tele_map("C", tele.commands, "commands")
-                tele_map("f", tele.find_files, "files")
-                tele_map("g", tele.live_grep, "live grep")
-                tele_map("h", tele.help_tags, "help")
-                tele_map("k", tele.keymaps, "keymaps")
-                tele_map("m", tele.man_pages, "man pages")
-
-                tele_map("F", function() tele.find_files({ hidden = true }) end, "all files")
-                tele_map("T", function() tele.colorscheme({ enable_preview = true }) end, "colorscheme")
-            end
-        },
-        {
-            "ThePrimeagen/harpoon",
-            branch = "harpoon2",
-            dependencies = { { "nvim-lua/plenary.nvim" } },
-            config = function()
-                local harpoon = require("harpoon")
-
-                harpoon:setup()
-
-                map("n", "<leader>a", function() harpoon:list():add() end)
-                map("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-
-                map("n", "<C-h>", function() harpoon:list():select(1) end)
-                map("n", "<C-j>", function() harpoon:list():select(2) end)
-                map("n", "<C-k>", function() harpoon:list():select(3) end)
-                map("n", "<C-l>", function() harpoon:list():select(4) end)
-            end,
-        },
-        {
-            "folke/trouble.nvim",
-            opts = {},
-            cmd = "Trouble",
-            keys = {
-            },
-        },
-        {
-            "tpope/vim-fugitive",
-            config = function()
-                map("n", "<leader>gb", ":Git blame<CR>", { desc = "Git: blame" })
-                map("n", "<leader>gc", ":Git commit<CR>", { desc = "Git: commit" })
-                map("n", "<leader>gs", ":Git<CR>", { desc = "Git: status" })
-            end,
-        },
-        {
-            "lewis6991/gitsigns.nvim",
-            config = function(_, opts)
-                local gs = require("gitsigns")
-
-                gs.setup(opts)
-
-                map("n", "<leader>gp", gs.preview_hunk, { desc = "Git: preview hunk" })
-            end,
-        },
-        {
-            "mbbill/undotree",
-            config = function()
-                map("n", "<leader>u", vim.cmd.UndotreeToggle)
-            end,
-        },
+        { "folke/lazydev.nvim",                     ft = "lua" },
+        { "nvim-treesitter/nvim-treesitter",        branch = "master",  build = ":TSUpdate" },
+        { "nvim-lua/plenary.nvim" },
+        { "saghen/blink.cmp",                       version = "1.*" },
+        { "nvim-telescope/telescope.nvim",          tag = "0.1.8" },
+        { "nvim-telescope/telescope-ui-select.nvim" },
+        { "ThePrimeagen/harpoon",                   branch = "harpoon2" },
+        { "folke/trouble.nvim",                     cmd = "Trouble",    keys = {} },
+        { "tpope/vim-fugitive" },
+        { "lewis6991/gitsigns.nvim" },
+        { "mbbill/undotree" },
     },
     -- Configure any other settings here. See the documentation for more details.
     -- colorscheme that will be used when installing plugins.
@@ -267,57 +154,113 @@ require("lazy").setup({
 
 
 
--------------------- LSP & THE LIKE --------------------
+-------------------- PLUGIN SETUP --------------------
 
-local capabilities = require("blink.cmp").get_lsp_capabilities()
-vim.lsp.config("*", {
-    capabilities = capabilities,
+-- Colors
+
+---@diagnostic disable: missing-fields
+require("tokyonight").setup({ transparent = true })
+vim.cmd("colorscheme tokyonight-night")
+
+
+-- Code Assistance
+
+---@diagnostic disable: missing-fields
+require("nvim-treesitter.configs").setup({
+    auto_install = true,
+    ensure_installed = { "lua", "python" },
+    highlight = { enable = true },
+    indent = { enable = true },
+    additional_vim_regex_highlighting = false,
 })
 
-vim.lsp.config("pyright", {
-    root_dir = vim.fs.dirname(vim.fs.find({ ".git", "pyproject.toml", "setup.py" }, { upward = true })[1]),
-    settings = {
-        python = {
-            pythonPath = ".venv/bin/python",
-            venvPath = ".",
-            venv = ".venv",
-        },
+require("blink.cmp").setup({
+    keymap = { preset = "default" },
+    signature = { enabled = true },
+    fuzzy = { implementation = "prefer_rust_with_warning" },
+})
+
+
+require("mason").setup({
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗",
+        }
+    }
+})
+
+
+-- Movement
+
+require("telescope").setup({
+    defaults = {
+        winblend = vim.o.winblend,
+        prompt_prefix = " ",
+        selection_caret = " ",
+    },
+    extensions = {
+        ["ui-select"] = {}
     },
 })
+pcall(require("telescope").load_extension, "ui-select")
 
-vim.lsp.config("isort", {
-    enabled = true,
-    profile = "black",
+require("harpoon"):setup()
+
+
+-- Other
+
+require("lazydev").setup({
+    library = {
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+    }
 })
 
-vim.lsp.enable({
-    "lua_ls",
-    "ts_ls",
-    "pyright",
-    "ruff",
-    "isort",
-})
+-------------------- PLUGIN MAPPINGS --------------------
 
-vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-    callback = function(ev)
-        local lsp_map = function(modes, keys, func, desc)
-            vim.keymap.set(modes, keys, func, { buffer = ev.buf, desc = "LSP: " .. desc })
-        end
+-- Mason
+map("n", "<leader>pm", ":Mason<CR>")
+map("n", "<leader>pM", ":MasonUpdate<CR>")
 
-        lsp_map("n", "K", vim.lsp.buf.hover, "hover")
-        lsp_map("n", "<leader>E", vim.diagnostic.open_float, "diagnostic")
-        lsp_map("n", "<leader>k", vim.lsp.buf.signature_help, "signature help")
-        lsp_map("n", "<leader>rn", vim.lsp.buf.rename, "rename")
-        lsp_map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "code action")
-        lsp_map("n", "<leader>lf", vim.lsp.buf.format, "format")
+-- Telescope
+local tele_map = function(keys, func, desc)
+    map("n", "<leader>f" .. keys, func, { desc = "Find: " .. desc })
+end
 
-        local tele = require("telescope.builtin")
-        lsp_map("n", "gd", tele.lsp_definitions, "goto definition")
-        lsp_map("n", "<leader>fs", tele.lsp_document_symbols, "document symbols")
-        lsp_map("n", "<leader>fS", tele.lsp_dynamic_workspace_symbols, "dynamic symbols")
-        lsp_map("n", "<leader>ft", tele.lsp_type_definitions, "goto type")
-        lsp_map("n", "<leader>fr", tele.lsp_references, "goto references")
-        lsp_map("n", "<leader>fi", tele.lsp_implementations, "goto implementation")
-    end,
-})
+local builtin = require("telescope.builtin")
+tele_map("/", builtin.current_buffer_fuzzy_find, "within buffer")
+tele_map("b", builtin.buffers, "buffers")
+tele_map("c", builtin.grep_string, "word under cursor")
+tele_map("C", builtin.commands, "commands")
+tele_map("f", builtin.find_files, "files")
+tele_map("g", builtin.live_grep, "live grep")
+tele_map("h", builtin.help_tags, "help")
+tele_map("k", builtin.keymaps, "keymaps")
+tele_map("m", builtin.man_pages, "man pages")
+tele_map("F", function() builtin.find_files({ hidden = true }) end, "all files")
+tele_map("T", function() builtin.colorscheme({ enable_preview = true }) end, "colorscheme")
+
+-- Harpoon
+local harpoon = require("harpoon")
+map("n", "<leader>a", function() harpoon:list():add() end)
+map("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+map("n", "<C-h>", function() harpoon:list():select(1) end)
+map("n", "<C-j>", function() harpoon:list():select(2) end)
+map("n", "<C-k>", function() harpoon:list():select(3) end)
+map("n", "<C-l>", function() harpoon:list():select(4) end)
+
+-- Git Fugitive
+map("n", "<leader>gb", ":Git blame<CR>", { desc = "Git: blame" })
+map("n", "<leader>gc", ":Git commit<CR>", { desc = "Git: commit" })
+map("n", "<leader>gs", ":Git<CR>", { desc = "Git: status" })
+
+-- Git Signs
+local gitsigns = require "gitsigns"
+map("n", "<leader>gp", gitsigns.preview_hunk, { desc = "Git: preview hunk" })
+map("n", "[g", "<cmd>Gitsigns prev_hunk<cr>", { desc = "Git: previous hunk" })
+map("n", "]g", "<cmd>Gitsigns next_hunk<cr>", { desc = "Git: next hunk" })
+
+-- Undo Tree
+map("n", "<leader>u", vim.cmd.UndotreeToggle)
+
