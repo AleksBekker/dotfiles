@@ -3,9 +3,8 @@
 -- My single-file Neovim configuration
 --
 -- TODO:
---   * Fix Plenary on MacOS
---   * Figure out Mason + lspconfig integration
 --   * Consider DAP use instead of tmux + entr workflow
+--   * Figure out Mason + lspconfig integration
 --   - Configure built-in terminal and mappings
 --   - Move from Lazy plugin manager to builtin upon 0.12 update
 --     - Remove the .gitignore when no longer using lazy.nvim
