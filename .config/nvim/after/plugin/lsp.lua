@@ -1,10 +1,10 @@
 local capabilities = require("blink.cmp").get_lsp_capabilities()
+
 vim.lsp.config("*", {
     capabilities = capabilities,
 })
 
 vim.lsp.config("pyright", {
-    root_dir = vim.fs.dirname(vim.fs.find({ ".git", "pyproject.toml", "setup.py" }, { upward = true })[1]),
     settings = {
         python = {
             pythonPath = ".venv/bin/python",
@@ -14,12 +14,27 @@ vim.lsp.config("pyright", {
     },
 })
 
-vim.lsp.enable({
-    "lua_ls",
-    "ts_ls",
-    "pyright",
-    "ruff",
-    "isort",
+vim.lsp.config("jsonls", {
+    settings = {
+        json = {
+            schemas = require("schemastore").json.schemas(),
+            validate = { enable = true },
+        },
+    },
+})
+
+vim.lsp.config("ts_ls", {
+    on_attach = function(client)
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+    end,
+})
+
+vim.diagnostic.config({
+    virtual_text = true,
+    float = {
+        source = true,
+    },
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -35,6 +50,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         lsp_map("n", "<leader>rn", vim.lsp.buf.rename, "rename")
         lsp_map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "code action")
         lsp_map("n", "<leader>lf", vim.lsp.buf.format, "format")
+        lsp_map("n", "<leader>ld", vim.diagnostic.setqflist, "diagnostics")
 
         local tele = require("telescope.builtin")
         lsp_map("n", "gd", tele.lsp_definitions, "goto definition")
