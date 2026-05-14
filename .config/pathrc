@@ -4,7 +4,7 @@ export GOPATH="${HOME}/go"
 export VOLTA_HOME="${HOME}/.volta"
 
 # More paths
-new_paths=("$HOME/.cargo/bin" "${VOLTA_HOME}/bin" "${GOPATH}/bin" "$HOME/.local/bin" "$HOME/bin")
+new_paths=("$HOME/.cargo/bin" "${VOLTA_HOME}/bin" "${GOPATH}/bin" "$HOME/.local/bin" "$HOME/bin" "$HOME/.deno/bin")
 for new_path in $new_paths;
     do [ -d $new_path ] && export PATH=$new_path:$PATH;
 done

@@ -10,4 +10,4 @@ lg = lg1
 [core]
 	autocrlf = input
 [init]
-	defaultBranch = trunk
+	defaultBranch = main
